@@ -144,3 +144,4 @@ def calcularMonto(fechaInicio, fechaFin):
 monto = calcularMonto(fechaIniRes,fechaFinRes)
 print("El monto a pagar es")
 print(monto)
+#print(calcularMonto("2015 12 20 23:59" ,"2015 12 21 00:03"))
