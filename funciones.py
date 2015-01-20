@@ -15,7 +15,7 @@ if __name__ == '__main__':
 fechaIniRes = "2015 12 20 00:00"   
 
 #Lista de Fechas en las que se termina la reservación
-fechaFinRes= "2015 12 23 23:59"   
+fechaFinRes= "2015 12 20 23:59"   
 
 #Diccionario con las tarifas asociadas a etapa diurna o nocturna
 tarifa_diurna = 2
@@ -69,7 +69,7 @@ def validar_dias(fecha1,fecha2):
     
 def validar_minutos(fecha1,fecha2):
     #caso en que la reserva sea por menos de 30 minutos
-    if ((fecha2.minute - fecha1.minute) < 15) and (fecha2.month == fecha1.month) and (fecha2.day == fecha1.day):
+    if (abs((fecha2.minute - fecha1.minute)) < 15) and (fecha2.month == fecha1.month) and (fecha2.day == fecha1.day):
         es_valida_min = False
     else:
         es_valida_min = True    
