@@ -12,17 +12,15 @@ if __name__ == '__main__':
     pass
 
 #Lista de Fechas de inicio de la reservación
-fechaIniRes = "2015 12 20 00:00"   
+fechaIniRes = "2015 12 20 18:00"   
 
 #Lista de Fechas en las que se termina la reservación
-fechaFinRes= "2015 12 20 23:59"   
+fechaFinRes= "2015 12 21 17:59"   
 
 #Diccionario con las tarifas asociadas a etapa diurna o nocturna
 tarifa_diurna = 2
 tarifa_nocturna = 4
-fraccion_menor30=1
-
-
+hora_extra = 0
 
 #funcion que determina la tarifa a ser usada dependiendo la hora de entrada
 def hallarTarifa(horaI):
@@ -69,7 +67,7 @@ def validar_dias(fecha1,fecha2):
     
 def validar_minutos(fecha1,fecha2):
     #caso en que la reserva sea por menos de 30 minutos
-    if (abs((fecha2.minute - fecha1.minute)) < 15) and (fecha2.month == fecha1.month) and (fecha2.day == fecha1.day):
+    if ((fecha2.minute - fecha1.minute) < 15) and (fecha2.month == fecha1.month) and (fecha2.day == fecha1.day):
         es_valida_min = False
     else:
         es_valida_min = True    
@@ -123,23 +121,23 @@ def calcularMonto(fechaInicio, fechaFin):
         #calculamos el monto a pagar por fracciones de hora
         total_min = abs(horaFin.minute - horaIni.minute)
           
-        if total_min < 30:
-            fraccion = fraccion_menor30
+        if total_min != 0:
+            hora_extra = tarifa
         else:
-            fraccion = tarifa
+            hora_extra = 0
         
         #en caso de manejar dos tarifas por un mismo dia
         if horaIni.hour < 18 and horaFin.hour > 18:
             monto1 = (18 - horaIni.hour) * tarifa_diurna
             monto2 = (horaFin.hour-18) * tarifa_nocturna
     
-            monto_total = monto_dias + monto1 + monto2 + fraccion
+            monto_total = monto_dias + monto1 + monto2 + hora_extra
     
         elif (total_min >= 15) and (total_horas == 0):
             monto_total = tarifa
             
         else:   
-            monto_total = monto_dias + monto_horas + fraccion
+            monto_total = monto_dias + monto_horas + hora_extra
         
         return monto_total
 
