@@ -12,15 +12,16 @@ if __name__ == '__main__':
     pass
 
 #Lista de Fechas de inicio de la reservación
-fechaIniRes = "2015 12 20 18:00"   
+fechaIniRes = "2015 12 20 23:59"   
 
 #Lista de Fechas en las que se termina la reservación
-fechaFinRes= "2015 12 21 17:59"   
+fechaFinRes= "2015 12 21 00:15"   
 
 #Diccionario con las tarifas asociadas a etapa diurna o nocturna
 tarifa_diurna = 2
 tarifa_nocturna = 4
 hora_extra = 0
+
 
 #funcion que determina la tarifa a ser usada dependiendo la hora de entrada
 def hallarTarifa(horaI):
@@ -32,12 +33,14 @@ def hallarTarifa(horaI):
 
 #funcion que dada dos fechas verifica que sean correctas
 def validar_fechas(fecha1,fecha2):
+    
 
     if fecha2 < fecha1:
         es_valida_fecha = False
+      
     else:
         es_valida_fecha = True
-    
+        
     return es_valida_fecha
 
 
@@ -66,11 +69,18 @@ def validar_dias(fecha1,fecha2):
     return es_valida_dias
     
 def validar_minutos(fecha1,fecha2):
-    #caso en que la reserva sea por menos de 30 minutos
-    if ((fecha2.minute - fecha1.minute) < 15) and (fecha2.month == fecha1.month) and (fecha2.day == fecha1.day):
+    es_valida_min = True
+    
+    #caso en que la reserva sea por menos de 15 minutos
+    if (abs((fecha2.minute - fecha1.minute)) < 15) and (fecha2.day == fecha1.day):
         es_valida_min = False
-    else:
-        es_valida_min = True    
+        
+    if (((fecha2.hour - fecha1.hour) == 1) and (fecha2.day == fecha1.day) and (fecha2.minute+60 - fecha1.minute < 15)):
+        es_valida_min = False
+                        
+    if ((fecha2.day-1 == fecha1.day) and (fecha1.hour == 23) and (fecha2.hour == 0) and (fecha2.minute+60 - fecha1.minute < 15)):
+        es_valida_min = False
+        
     return es_valida_min
 
 #funcion que calcula el monto a pagar por una reservacion de estacionamiento
@@ -82,18 +92,23 @@ def calcularMonto(fechaInicio, fechaFin):
     
     #validamos las fechas dadas
     valida_fecha = validar_fechas(horaIni,horaFin)
-    valida_dias = validar_dias(horaIni,horaFin)
-    valida_min = validar_minutos(horaIni,horaFin) 
     
-    if valida_fecha == False:
+    
+    if valida_fecha == True:
+        valida_dias = validar_dias(horaIni,horaFin)
+        if valida_dias == True:
+            valida_min = validar_minutos(horaIni,horaFin)
+            if valida_min == True:
+                pass
+            else:
+                 print("La reserva no puede ser menor a 15 minutos")
+        else:
+            print("La reserva no puede ser por mas de tres dias")
+
+    else:
         print("La fecha de salida debe ser mayor a la fecha de entrada")
-
-    if valida_dias == False:
-        print("La reserva no puede ser por mas de tres dias")
-
-    if valida_min == False:
-        print("La reserva no puede ser menor a 15 minutos")
-        
+    
+    
     if (valida_fecha == True) and (valida_dias == True) and (valida_min == True) and (valida_min == True): 
             
         #calculamos la tarifa a usar
@@ -107,7 +122,9 @@ def calcularMonto(fechaInicio, fechaFin):
         elif (horaFin.month > horaIni.month) and (horaIni.day - horaFin.day >= 25) and (horaIni.month == 2):
             total_dias = 28-(horaIni.day - horaFin.day)
         elif (horaFin.month == 1) and (horaIni.day - horaFin.day >= 28) and (horaIni.month == 12):
-            total_dias = 31-(horaIni.day - horaFin.day)    
+            total_dias = 31-(horaIni.day - horaFin.day) 
+        elif ((horaFin.day-1 == horaIni.day) and (horaIni.hour == 23) and (horaFin.hour+24 - horaIni.hour > 0)):
+            total_dias = 0
         else:
             total_dias = horaFin.day - horaIni.day
         
@@ -134,6 +151,12 @@ def calcularMonto(fechaInicio, fechaFin):
             monto_total = monto_dias + monto1 + monto2 + hora_extra
     
         elif (total_min >= 15) and (total_horas == 0):
+            monto_total = tarifa
+            
+        elif (((horaFin.hour - horaIni.hour) == 1) and (horaFin.minute+60 - horaIni.minute >= 15)):
+            monto_total = tarifa
+            
+        elif ((horaFin.day-1 == horaIni.day) and (horaIni.hour == 23) and (horaFin.hour == 0) and (horaFin.minute+60 - horaIni.minute >= 15)):
             monto_total = tarifa
             
         else:   
