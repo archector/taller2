@@ -9,7 +9,6 @@ from funciones import calcularMonto
 
 class Test_Calcular_Monto(unittest.TestCase):
 
-
     def test_fechas_iguales(self):
         self.assertEquals(calcularMonto("2015 12 20 18:00" ,"2015 12 20 18:00"),None,"pass")
         
@@ -40,5 +39,7 @@ class Test_Calcular_Monto(unittest.TestCase):
     def test_montoMax_23_horas_59min(self):
         self.assertEquals(calcularMonto("2015 12 20 18:00" ,"2015 12 21 17:59"),72,"pass")        
         
-#      def test_siguiente_dia(self):
-#          self.assertEqual(calcularMonto("2015 12 20 23:59" ,"2015 12 21 00:03"),4,"pass")
+    def test_hora_incompleta(self):
+        self.assertEquals(calcularMonto("2015 12 20 18:00" ,"2015 12 20 18:59"),4,"pass")
+        
+    
