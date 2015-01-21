@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-	<name>tarea_est</name>
+<projectDescription>
+	<name>taller2</name>
 	<comment></comment>
 	<projects>
 	</projects>
 	<buildSpec>
-		<buildCommand>
-			<name>org.python.pydev.PyDevBuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
 	</buildSpec>
 	<natures>
-		<nature>org.python.pydev.pythonNature</nature>
 	</natures>
 </projectDescription>
